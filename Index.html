@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Grow kit builder</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Newsreader:ital,wght@0,400;0,600;1,400&display=swap">
+<style>
+:root{--bg:#f2efe6;--ink:#1d2a22;--mute:#5b675f;--line:#cfc9b8;--card:#faf8f1;--accent:#c4691a;--green:#3f6a2d;--wbg:#fbeedd;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14211c;--ink:#ece8da;--mute:#a1ab9f;--line:#33443b;--card:#1b2c25;--green:#9bc27d;--accent:#e8a05a;--wbg:#3a2c1c;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#14211c;--ink:#ece8da;--mute:#a1ab9f;--line:#33443b;--card:#1b2c25;--green:#9bc27d;--accent:#e8a05a;--wbg:#3a2c1c;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 Newsreader,Georgia,serif}
+main{max-width:720px;margin:0 auto;padding:22px 16px 60px}
+h1,h2,button,th,.k,input,.vd,summary b{font-family:"Bricolage Grotesque",system-ui,sans-serif}
+h1{font-size:clamp(30px,8vw,44px);line-height:1;margin:.1em 0 .15em;font-weight:800;letter-spacing:-.03em}
+.sub{color:var(--mute);font-style:italic;margin:0 0 12px}
+.k{font-size:13px;font-weight:600;margin:14px 0 6px;display:block}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+button{cursor:pointer;color:var(--ink)}
+.chips button,.tabs button{border:1.5px solid var(--ink);background:none;border-radius:999px;padding:8px 13px;min-height:40px;font-size:14px}
+.chips button[aria-pressed="true"],.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+.in{display:flex;gap:8px;margin-top:8px}
+.f1{display:flex;flex-direction:column}
+.dims{display:grid;grid-template-columns:1fr 1fr 1fr .9fr;gap:8px;margin-top:10px}
+.dims label{font:600 12px "Bricolage Grotesque",sans-serif;display:flex;flex-direction:column;gap:3px}
+.hint{font-size:13px;color:var(--mute);margin:6px 0 0}
+input,select{font-size:16px;padding:9px 11px;border:1.5px solid var(--ink);border-radius:8px;background:var(--card);color:var(--ink);width:100%;min-width:0}
+button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:4px 14px 14px;margin:12px 0}
+.box .k:first-child{margin-top:10px}
+.sum{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:18px 0 10px}
+.sum div{margin:2px 0}
+.vd{font-weight:600;margin-top:6px!important}
+.vd.good{color:var(--green)}.vd.warn{color:var(--accent)}
+.wn{background:var(--wbg);border-left:4px solid var(--accent);padding:6px 12px;border-radius:6px;margin:8px 0;font-size:15px}
+.tabs{display:flex;gap:6px;margin:14px 0 10px;flex-wrap:wrap}
+.it{display:flex;gap:10px;align-items:flex-start;border-bottom:1px solid var(--line);padding:8px 0}
+.it input{width:20px;height:20px;margin-top:4px;flex:none}
+.it details{flex:1}
+summary{cursor:pointer;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary b{display:block;font-size:15px}
+summary span{font-size:17px}
+summary::after{content:" ?";color:var(--mute);font-size:13px}
+details[open] summary::after{content:" \2212"}
+.d{color:var(--mute);font-size:15px;margin-top:4px}
+table{width:100%;border-collapse:collapse;font-size:16px}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:13px;color:var(--mute);font-weight:600}
+td small{color:var(--mute)}
+.dg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.dg figure{margin:0;text-align:center;font-size:13px}
+.dg svg{width:100%;height:auto;max-height:190px}
+.cp{margin-top:14px;border:1.5px solid var(--ink);background:none;border-radius:8px;padding:10px 14px;font-size:15px}
+textarea{width:100%;height:150px;margin-top:8px;font:13px monospace;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px}
+.note{font-size:13px;color:var(--mute);border-top:1px solid var(--line);padding-top:10px;margin-top:22px}
+a{color:var(--ink);font-weight:600}
+</style>
+</head>
+<body>
+<main>
+<h1>Grow kit builder</h1>
+<p class="sub">Pick your tent and light. Get the exact kit, light by stage, and climate.</p>
+
+<section class="box"><span class="k">Grow space</span>
+<div class="dims"><label>Length<input id="tl" type="number" inputmode="decimal" min="1" step="any"></label><label>Width<input id="tw" type="number" inputmode="decimal" min="1" step="any"></label><label>Height<input id="th" type="number" inputmode="decimal" min="1" step="any"></label><label>Unit<select id="tu"><option value="cm">cm</option><option value="m">m</option><option value="ft">ft</option></select></label></div>
+<div class="dims" style="grid-template-columns:1fr"><label>Or volume in m³ (leave length and width empty)<input id="tv" type="number" inputmode="decimal" min="0.001" step="any"></label></div>
+<p class="hint">Any size from 10 cm works. Height is optional (160 to 200 cm assumed). With volume only, the height above is used, otherwise 160 cm. <button type="button" id="ct" class="cp" style="margin:0 0 0 6px;padding:4px 10px;font-size:13px">Clear tent</button></p></section>
+
+<section class="box"><span class="k">Light type</span>
+<div class="chips" id="lc"></div>
+<div class="in"><input id="lw" type="number" inputmode="numeric" min="20" max="3000" aria-label="Light power in watts"></div></section>
+
+<section class="box"><span class="k">Growing method</span>
+<div class="chips" id="mc"></div></section>
+
+<div id="sum"></div>
+<div id="res" hidden>
+<div class="tabs" role="tablist" id="tabs"></div>
+<div id="p0"></div><div id="p1" hidden></div><div id="p2" hidden></div>
+</div>
+<div class="note" id="src"></div>
+</main>
+<script>
+var $=function(i){return document.getElementById(i)};
+var ALIAS={hs60:[60,60,158],ds60:[60,60,158],hs80:[80,80,180],ds90:[90,90,178],hs100:[100,100,198],ds120:[120,120,198],hs120:[120,120,200],hs150:[150,150,200],dr150:[150,150,217],lodge:[160,120,198]};
+var FOOT=[[60,60],[80,80],[90,90],[100,100],[120,120],[150,150],[120,240],[240,240]];
+var FANS=[[100,300,30],[125,450,40],[150,600,55],[200,1040,123],[250,1285,169],[315,1970,284]];
+var FIL={100:[350,"100 x 300"],125:[500,"125 x 300"],150:[600,"150 x 300"],200:[1125,"200 x 600"],250:[1420,"250 x 600"],315:[2440,"315 x 600"]};
+var STDHPS=[150,250,400,600,1000];
+function r10(x){return Math.round(x/10)*10}
+function parseTent(s){s=s.toLowerCase().trim();if(!s)return null;var k=s.replace(/[\s_-]/g,"");
+for(var a in ALIAS)if(k.indexOf(a)>-1){var d=ALIAS[a];return{L:d[0],W:d[1],H:d[2],h:1}}
+var m=s.match(/\d+(?:[.,]\d+)?/g);if(!m)return null;var n=m.map(function(x){return parseFloat(x.replace(",","."))});
+var u=/ft|feet|'/.test(s)?"ft":(/cm/.test(s)?"cm":(/\dm|m\b/.test(s)?"m":""));
+if(!u){var big=n.some(function(x){return x>=30});u=big?"cm":(n.every(function(x){return x%1===0&&x<=12})?"ft":"m")}
+var f=u==="ft"?30.48:(u==="m"?100:1),c=n.map(function(x){return Math.round(x*f)});
+var L=c[0],W=c.length>1?c[1]:c[0],H=c.length>2?c[2]:0;
+if(L<10||W<10||L>600||W>600)return null;
+var hh=H>=20&&H<=400;return{L:L,W:W,H:hh?H:(Math.min(L,W)<=65?160:(Math.min(L,W)<=95?180:200)),h:hh?1:0}}
+var TY={LED:{n:"LED",d:300,lo:250,hi:400,ach:45},COB:{n:"COB LED",d:350,lo:300,hi:450,ach:45},CFL:{n:"CFL",d:1000,lo:800,hi:1500,ach:55},CMH:{n:"CMH",d:400,lo:350,hi:450,ach:65},HPS:{n:"HPS",d:400,lo:300,hi:500,ach:80}};
+function parseLight(s){s=s.toLowerCase().trim();if(!s)return null;var w=s.match(/(\d{2,4})/);if(!w)return null;
+var t=/cob/.test(s)?"COB":/cfl|fluoresc|\bt5|\bt8/.test(s)?"CFL":/cmh|\blec\b|ceramic/.test(s)?"CMH":/hps|sodium|hid|\bmh\b|metal halide/.test(s)?"HPS":/led/.test(s)?"LED":"";
+return{w:+w[1],t:t||"LED",g:!t}}
+function vent(vol,ach){var req=Math.ceil(vol*ach*1.25),need=Math.ceil(req*1.5),nf=1,per=need;
+if(need>1970){nf=Math.ceil(need/1970);per=Math.ceil(need/nf)}
+var fan=null;for(var i=0;i<FANS.length;i++)if(FANS[i][1]>=per){fan=FANS[i];break}
+return{req:req,nf:nf,fan:fan,ff:FIL[fan[0]],ach:ach}}
+function dist(t,w){var B;
+if(t==="LED"||t==="COB"){B=w<=150?[[60,75],[45,60],[30,45]]:w<=300?[[60,80],[50,60],[35,50]]:w<=600?[[75,90],[55,70],[40,55]]:[[90,110],[60,80],[45,60]]}
+else if(t==="HPS"){var H=w<=150?[20,25,30]:w<=250?[25,30,35]:w<=400?[30,35,48]:w<=600?[35,41,64]:[41,55,79];B=[[H[2],H[2]+20],[H[0],H[1]],[H[1],H[2]]]}
+else if(t==="CMH"){var v2=w<=350?[45,60]:[55,75],f2=w<=350?[30,50]:[45,60];B=[[v2[0]+20,v2[1]+20],v2,f2]}
+else B=[[20,30],[15,25],[10,20]];
+return{seed:B[0],veg:B[1],flo:B[2]}}
+
+var LT="LED",MED="soil",TAB=0;
+function chips(id,items,cur,cb){var box=$(id);box.innerHTML="";items.forEach(function(it){var b=document.createElement("button");b.type="button";b.textContent=it[1];b.setAttribute("aria-pressed",it[0]===cur?"true":"false");b._v=it[0];b.onclick=function(){cb(it[0]);[].forEach.call(box.children,function(x){x.setAttribute("aria-pressed",x._v===it[0]?"true":"false")})};box.appendChild(b)})}
+var TG={LED:[280,35],COB:[310,35],CFL:[1000,0],CMH:[400,0],HPS:[350,100]};
+var HB=[[150,.36,.36],[250,.36,.64],[400,.81,1],[600,1,1.44],[1000,1.44,2.25]];
+function hpsW(A){if(A<=.3)return 150;if(A<=.645)return 250;if(A<.995)return 400;if(A<=1.445)return 600;if(A<=2.255)return 1000;return Math.ceil(A/2.25)*1000}
+function hpsWin(W){var b=HB[0];HB.forEach(function(x){if(Math.abs(Math.log(W/x[0]))<Math.abs(Math.log(W/b[0])))b=x});var k=W/b[0];return[b[1]*k,b[2]*k]}
+function hpsA(W){var w=hpsWin(W);return(w[0]+w[1])/2}
+function tgt(t,A){return t==="HPS"?hpsW(A):TG[t][0]*A+TG[t][1]}
+function areaFor(t,w){return t==="HPS"?Math.max(.03,hpsA(w)):Math.max(.03,(w-TG[t][1])/TG[t][0])}
+function recLight(t,area){var W,pf,fx=1,sp;
+if(t==="LED"||t==="COB"){W=r10(tgt(t,area));fx=area>1.6?Math.ceil(area/1.5):1;pf=W/fx;sp=W+" W "+TY[t].n+(fx>1?", "+fx+" fixtures of about "+r10(pf)+" W":"")}
+else if(t==="CFL"){W=r10(area*1000);pf=W;sp=Math.ceil(W/125)+" x 125 W CFL bulbs ("+W+" W)"}
+else if(t==="CMH"){fx=Math.max(1,Math.round(area*400/315));W=fx*315;pf=315;sp=fx+" x 315 W CMH, each with ballast"}
+else{var T=tgt("HPS",area);if(T>1100){fx=Math.ceil(T/1000);pf=1000;W=fx*1000;sp=fx+" x 1000 W HPS with ballast"}else{pf=STDHPS.reduce(function(a,x){return Math.abs(x-T)<Math.abs(a-T)?x:a},150);W=pf;sp=pf+" W HPS with ballast"}}
+return{W:W,pf:pf,fx:fx,sp:sp}}
+function stage(t,pf,fx){var d=dist(t,pf),led=t==="LED"||t==="COB",cfl=t==="CFL",ps=led?.3:(cfl?.25:.5),pv=cfl?.5:.6,T=pf*fx;
+return{s:{w:r10(T*ps),p:ps,d:d.seed,h:18,c:15},v:{w:r10(T*pv),p:pv,d:d.veg,h:18,c:50},f:{w:r10(T),p:1,d:d.flo,h:12,c:100},
+vn:led?"Dim the driver to about 60 %, or hang the lamp higher.":(cfl?"Switch off about half of the bulbs.":"Use a digital dimmable ballast or a smaller bulb, and raise the lamp if you cannot dim. A metal halide bulb is the classic veg bulb. Hand test: hold your hand at plant height for 10 seconds; if it is too hot for you, raise the lamp."),
+sn:led?"Raise to full veg power gradually over 1 to 2 weeks.":(cfl?"A few bulbs close to the plants are enough.":"HPS and CMH are intense for seedlings: use a CFL or LED for the first 1 to 2 weeks, or keep the lamp this high.")}}
+function svg(H,c,d){var sc=110/H,y0=126,mid=(d[0]+d[1])/2,ly=y0-(c+mid)*sc,fit=ly>=14;if(!fit)ly=14;
+return '<svg viewBox="0 0 110 136" role="img" aria-label="Lamp '+d[0]+' to '+d[1]+' cm above plants"><rect x="10" y="14" width="90" height="112" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".5"/><rect x="38" y="'+(y0-c*sc)+'" width="34" height="'+(c*sc)+'" rx="5" fill="#6f9a4f"/><rect x="26" y="'+ly+'" width="58" height="7" rx="2" fill="currentColor"/><line x1="55" y1="'+(ly+7)+'" x2="55" y2="'+(y0-c*sc)+'" stroke="#d9822b" stroke-width="1.5" stroke-dasharray="3 2"/></svg>'+(fit?"":"")}
+function fits(H,c,d){return c+(d[0]+d[1])/2+8<=H}
+function row(n,sp,dt){return '<div class="it"><input type="checkbox" aria-label="Got '+n+'"><details><summary><b>'+n+'</b><span>'+sp+'</span></summary><div class="d">'+dt+'</div></details></div>'}
+function tentStr(){var l=$("tl").value,w=$("tw").value,h=$("th").value,u=$("tu").value,v=parseFloat($("tv").value);
+if(!l&&!w&&v>0){var hc=parseFloat(h)>0?parseFloat(h):160,sd=Math.round(Math.sqrt(v*1e6/hc));return sd+"cm x "+sd+"cm x "+hc+"cm"}
+if(!l&&!w)return"";if(!l)l=w;if(!w)w=l;return l+u+" x "+w+u+(h?" x "+h+u:"")}
+function render(){var ts=tentStr(),tn=parseTent(ts),w=parseInt($("lw").value)||0,t=LT,ty=TY[t],msgs=[];
+if(!tn&&!w){$("sum").innerHTML=ts?'<div class="wn">Size out of range: length and width must be between 10 and 600 cm, or give a volume.</div>':'<p class="sub">Pick a tent size, or enter a light power.</p>';$("res").hidden=true;return}
+if(!tn){var a0=areaFor(t,w),side=Math.max(20,Math.round(Math.sqrt(a0)*100));tn={L:side,W:side,H:180,h:0,d:1};if(side<50)msgs.push("This light is smaller than the smallest standard tent (60 x 60 cm). The result is for a very small space such as propagation.");msgs.push("No tent entered. Sized from your "+w+" W "+ty.n+" light: "+side+" x "+side+" cm (about "+a0.toFixed(2)+" m\u00b2 in flowering). To use your own space, enter its length and width.")}
+var area=tn.L*tn.W/1e4,vol=tn.L*tn.W*tn.H/1e6,user=w>0,Lt=user?{W:w,pf:w,fx:1,sp:w+" W "+ty.n}:recLight(t,area),W=Lt.W,dn=Math.round(W/area),tg=r10(tgt(t,area)),wlo=r10(tgt(t,area)*.75),whi=r10(tgt(t,area)*1.35),vd;
+if(t==="CMH"&&!user)tg=W;var weak=W<wlo,strong=W>whi;if(t==="HPS"){var hw=hpsWin(W);weak=area>hw[1]*1.1;strong=area<hw[0]*.85}
+if(user&&tn.d)vd=["good","\u2713 Tent sized to your light: about "+dn+" W per m\u00b2."];else if(user){if(weak)vd=["warn","\u25b2 Too weak for flowering: "+W+" W for this tent (typical about "+tg+" W). Fine for seedlings, herbs and veg. For flowering use at least "+wlo+" W."];else if(strong)vd=["warn","\u25b2 Strong: "+W+" W for this tent (typical about "+tg+" W). Dim it, hang it higher, or choose about "+tg+" W instead."];else vd=["good","\u2713 Good match: "+W+" W for "+area.toFixed(2)+" m\u00b2 (typical about "+tg+" W for flowering)."]}
+else vd=["good","\u2713 Recommended for this tent: "+tg+" W is typical for flowering."];
+var st=stage(t,Lt.pf,Lt.fx),v=vent(vol,ty.ach),f=v.fan,ff=v.ff,nf=v.nf,cf=Math.max(1,Math.ceil(area/.8)),pl=Math.max(1,Math.round(area*4)),fw=f[2]*nf+cf*20,tot=W+fw,amps=Math.ceil(tot/230);
+var sm='<div class="sum"><div><b>Tent</b> '+tn.L+' x '+tn.W+' x '+tn.H+' cm \u00b7 '+area.toFixed(2)+' m\u00b2 \u00b7 '+vol.toFixed(2)+' m\u00b3'+(tn.h===0?' (height assumed: '+tn.H+' cm)':'')+'</div><div><b>Light</b> '+Lt.sp+(user?' (you entered)':' (recommended)')+'</div><div class="vd '+vd[0]+'">'+vd[1]+'</div></div>';
+msgs.forEach(function(m){sm+='<div class="wn">'+m+'</div>'});
+if(area<.25&&t==="HPS"&&!user)sm+='<div class="wn">\u25b2 HPS starts at 150 W, which is too strong for a space this small. Use LED.</div>';
+if(t==="CMH"&&area<.6)sm+='<div class="wn">\u25b2 A 315 W CMH bulb is too strong for a tent under 0.6 m\u00b2. Use LED or HPS.</div>';
+if(t==="CFL"&&area>.8)sm+='<div class="wn">\u25b2 CFL is only practical up to about 0.6 m\u00b2. For this size use LED, COB, CMH or HPS.</div>';
+if(!fits(tn.H,st.f.c,st.f.d))sm+='<div class="wn">\u25b2 In flowering the lamp would reach the tent roof: keep plants shorter (training), dim the light, or pick a smaller fixture. In a very low box (under about 80 cm) dim the light and grow compact plants.</div>';
+$("sum").innerHTML=sm;$("res").hidden=false;
+var it=[["Tent",tn.L+" x "+tn.W+" x "+tn.H+" cm","Floor "+area.toFixed(2)+" m\u00b2, volume "+vol.toFixed(2)+" m\u00b3."],
+["Light",Lt.sp,"Power is treated as full flowering power and means real draw, not \u201cequivalent\u201d watts."],
+["Extraction fan",(nf>1?nf+" x ":"")+f[0]+" mm, "+f[1]+" m\u00b3/h, "+f[2]+" W",(v.req<60?"For a space this small the smallest fan in this app is oversized: a 60 to 80 mm fan on a speed controller is enough if its rating is at least the airflow needed. ":"")+"Airflow needed: at least "+v.req+" m\u00b3/h ("+vol.toFixed(2)+" m\u00b3 \u00d7 "+v.ach+" air changes an hour \u00d7 1.25). The fan is 1.5 \u00d7 that, so it runs at about two thirds speed. EC mixed-flow type on a speed controller, e.g. VENTS TT Silent-M "+f[0]+" EC."],
+["Carbon filter",(nf>1?"1 per fan: ":"1 x ")+ff[1]+" mm, "+ff[0]+" m\u00b3/h","Neck "+f[0]+" mm, same as the fan. A filter has no power draw; its rating must be at least the fan\u2019s "+f[1]+" m\u00b3/h. e.g. a Rhino-type filter "+ff[1]+" (check the maker\u2019s datasheet for the exact rating)."],
+["Ducting",f[0]+" mm, 3 m per fan, 4 clamps","Each 90\u00b0 bend costs about 10 % airflow."],
+["Clip fans",cf+" x 15 cm, about 20 W each","One across the canopy, one below it. Passive intake: open the lower vents."]];
+if(MED==="hydro"){it.push(["Hydro system",pl+" net pots, reservoir "+pl*4+" L","4 L per plant minimum. Clay pebbles or rockwool, air pump, air stone."],["Nutrients","Hydroponic 2 or 3-part base","Check pH and EC every day or two."])}
+else{it.push(["Pots",pl+" x 11 L + "+(pl+2)+" x 1 L starter","About 4 plants per m\u00b2."+(MED==="coco"?" Fabric pots drain well in coco.":"")],["Medium",MED==="coco"?"Coco coir + perlite":"Potting soil + perlite",(MED==="coco"?"Coco needs feeding from day one and Cal-Mag. ":"Soil usually feeds for the first 2 to 3 weeks. ")+"Perlite or a layer of clay pebbles improves drainage."],["Nutrients","2 or 3-part base (grow + bloom)","Start at half the label dose."])}
+var ph=MED==="soil"?"6.0 to 7.0":"5.5 to 6.5";
+it.push(["Timer",amps+" A rated, digital","Load about "+tot+" W ("+Math.round(tot/230*10)/10+" A). Use a contactor if the light load is over 10 A."],["Thermo-hygrometer","with min and max memory","Check temperature and humidity at canopy height."],["pH pen","digital + calibration solution","Target pH "+ph+"."]);
+var p0='';it.forEach(function(x){p0+=row(x[0],x[1],x[2])});p0+='<button class="cp" id="cp" type="button">Copy shopping list</button><textarea id="ta" hidden readonly aria-label="Shopping list text"></textarea>';
+var rows=[["Seedlings and clones",st.s],["Vegetative",st.v],["Flowering",st.f]],p1='<table><thead><tr><th></th><th>Power</th><th>Lamp height</th><th>Light</th></tr></thead><tbody>';
+rows.forEach(function(r){var s=r[1];p1+='<tr><th scope="row">'+r[0]+'</th><td>'+s.w+' W<br><small>'+Math.round(s.p*100)+' %</small></td><td>'+s.d[0]+' to '+s.d[1]+' cm</td><td>'+s.h+' h</td></tr>'});
+p1+='</tbody></table><p class="d">Height is measured from the lamp or reflector to the top of the plants'+(Lt.fx>1?', per fixture':'')+'. Veg: '+st.vn+' Seedlings: '+st.sn+'</p><div class="dg">';
+rows.forEach(function(r){var s=r[1];p1+='<figure>'+svg(tn.H,s.c,s.d)+'<figcaption>'+r[0].split(" ")[0]+'<br>'+s.d[0]+' to '+s.d[1]+' cm'+(fits(tn.H,s.c,s.d)?'':'<br>\u25b2 too tall')+'</figcaption></figure>'});
+p1+='</div>';
+var ek=function(h,wv){return(Math.round((wv*h+fw*24)/100)/10)};
+var p2='<table><thead><tr><th></th><th>Temperature</th><th>Humidity</th></tr></thead><tbody><tr><th scope="row">Seedlings</th><td>22 to 26 \u00b0C</td><td>65 to 75 %</td></tr><tr><th scope="row">Vegetative</th><td>22 to 28 \u00b0C</td><td>55 to 70 %</td></tr><tr><th scope="row">Flowering</th><td>20 to 26 \u00b0C</td><td>40 to 50 %</td></tr></tbody></table><p class="d">Target pH: '+ph+'.</p><table><thead><tr><th>Power</th><th></th></tr></thead><tbody><tr><th scope="row">Full load</th><td>'+tot+' W ('+Math.round(tot/230*10)/10+' A)</td></tr><tr><th scope="row">Veg day</th><td>'+ek(18,st.v.w)+' kWh (18 h light)</td></tr><tr><th scope="row">Flower day</th><td>'+ek(12,W)+' kWh (12 h light)</td></tr></tbody></table>';
+$("p0").innerHTML=p0;$("p1").innerHTML=p1;$("p2").innerHTML=p2;
+var txt="Tent: "+tn.L+" x "+tn.W+" x "+tn.H+" cm\n";it.slice(1).forEach(function(x){txt+=x[0]+": "+x[1]+"\n"});txt+="Light flowering: "+st.f.w+" W, lamp "+st.f.d[0]+"-"+st.f.d[1]+" cm\nLight veg: "+st.v.w+" W, lamp "+st.v.d[0]+"-"+st.v.d[1]+" cm\nLight seedlings: "+st.s.w+" W, lamp "+st.s.d[0]+"-"+st.s.d[1]+" cm";
+$("cp").onclick=function(){var ta=$("ta");ta.value=txt;ta.hidden=false;ta.select();try{navigator.clipboard.writeText(txt).then(function(){$("cp").textContent="Copied"},function(){$("cp").textContent="Select and copy the text below"})}catch(e){$("cp").textContent="Select and copy the text below"}};
+showTab(TAB)}
+function showTab(i){TAB=i;[0,1,2].forEach(function(k){$("p"+k).hidden=k!==i});[].forEach.call($("tabs").children,function(b,k){b.setAttribute("aria-selected",k===i?"true":"false")})}
+["Shopping list","Light by stage","Climate and power"].forEach(function(n,i){var b=document.createElement("button");b.type="button";b.setAttribute("role","tab");b.textContent=n;b.onclick=function(){showTab(i)};$("tabs").appendChild(b)});
+chips("lc",[["LED","LED"],["COB","COB"],["CFL","CFL"],["CMH","CMH"],["HPS","HPS"]],"LED",function(v){LT=v;render()});
+chips("mc",[["soil","Soil"],["coco","Coco"],["hydro","Hydro"]],"soil",function(v){MED=v;render()});
+var fo=function(){render()};["tl","tw","th","tv"].forEach(function(i){$(i).oninput=fo});$("tu").onchange=fo;$("ct").onclick=fo2;function fo2(){["tl","tw","th","tv"].forEach(function(i){$(i).value=""});render()}$("lw").oninput=render;
+$("src").innerHTML='<details><summary><b>How reliable are these numbers?</b></summary><p><b>From sources:</b> HPS bulb coverage and lamp distances (<a href="https://www.growweedeasy.com/hps-grow-lights-setup" target="_blank" rel="noopener">Grow Weed Easy</a>); LED power for small tents (<a href="https://www.secretjardin.com/wp-content/uploads/2024/08/2024-SECRET-JARDIN-CATALOGUE-WEB-0.05.pdf" target="_blank" rel="noopener">Secret Jardin 2024 catalogue</a>: 100 W for 60 x 60 and 60 x 40, 200 W for 90 x 90, 400 W for 120 x 120); extraction method (tent volume \u00d7 air changes \u00d7 1.25 for filter and ducting, see <a href="https://www.growell.co.uk/blogs/the-beginners-growing-guide/grow-room-ventilation" target="_blank" rel="noopener">Growell</a>); fan power and airflow from <a href="https://egypt.ventilation-system.com/download/20157" target="_blank" rel="noopener">VENTS TT Silent-M EC data</a>.</p><p><b>Rules of thumb, not measured:</b> COB, CFL and CMH power per m\u00b2, LED and COB lamp distances (follow your fixture\u2019s manual), 60 % power in veg, 4 plants per m\u00b2, 11 L pots, clip fan count, temperature and humidity, and the 1.5 \u00d7 fan reserve.</p><p><b>Check before buying:</b> carbon filter ratings differ between makers and series, so read the datasheet of the exact model. Real results depend on duct length, room temperature and the plants. Check your local laws before growing any plant indoors.</p></details>';
+
+render();
+</script>
+</body>
+</html>
